@@ -7,9 +7,7 @@
     <application
         android:allowBackup="true"
         android:label="G.S Ledger"
-        android:icon="@mipmap/ic_launcher"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Material3.DayNight.NoActionBar">
+        android:supportsRtl="true">
 
         <activity
             android:name=".MainActivity"

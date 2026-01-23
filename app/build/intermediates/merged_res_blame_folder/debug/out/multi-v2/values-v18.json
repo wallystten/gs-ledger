@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.gsledger.app-mergeDebugResources-18:/values-v18/values-v18.xml",
+            "map": [
+                {
+                    "source": "/data/data/com.termux/files/home/.gradle/caches/9.2.0/transforms/a9f4980fd844b0ae7d5174d3e4376c90/transformed/appcompat-1.6.1/res/values-v18/values-v18.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "48",
+                        "endOffsets": "99"
+                    }
+                }
+            ]
+        }
+    ]
+}

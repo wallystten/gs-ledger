@@ -1,5 +1,6 @@
 package com.gsledger.app
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
@@ -15,7 +16,9 @@ class MainActivity : AppCompatActivity() {
         val btnVerResumo = findViewById<Button>(R.id.btnVerResumo)
 
         btnAdicionar.setOnClickListener {
-            Toast.makeText(this, "Tela de adicionar lançamento (em breve)", Toast.LENGTH_SHORT).show()
+            // ABRE A TELA DE ADICIONAR LANÇAMENTO
+            val intent = Intent(this, AddTransactionActivity::class.java)
+            startActivity(intent)
         }
 
         btnVerResumo.setOnClickListener {

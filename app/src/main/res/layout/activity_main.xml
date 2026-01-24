@@ -2,12 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal"
+    android:background="#F5F6FA">
+
+    <TextView
+        android:id="@+id/tituloApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GS Ledger"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#1B1F3B"
+        android:layout_marginTop="40dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GS Ledger funcionando 🚀"
-        android:textSize="20sp"/>
+        android:text="Controle financeiro simples"
+        android:textSize="16sp"
+        android:textColor="#555"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/btnAdicionar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Adicionar Lançamento"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#1B1F3B"
+        android:textColor="@android:color/white"/>
+
+    <Button
+        android:id="@+id/btnVerResumo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ver Resumo"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#4CAF50"
+        android:textColor="@android:color/white"/>
+
 </LinearLayout>

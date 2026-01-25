@@ -5,11 +5,10 @@
         android:allowBackup="true"
         android:label="GS Ledger"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <!-- TELA PRINCIPAL -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -19,7 +18,6 @@
             </intent-filter>
         </activity>
 
-        <!-- NOVA TELA: ADICIONAR LANÇAMENTO -->
         <activity
             android:name=".AddTransactionActivity"
             android:exported="false" />

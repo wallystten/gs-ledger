@@ -30,7 +30,28 @@
             android:layout_height="wrap_content"
             android:hint="Valor"
             android:inputType="numberDecimal"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="12dp"/>
+
+        <!-- 🔘 Seleção de Entrada ou Saída -->
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <RadioButton
+                android:id="@+id/rbEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Entrada"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/rbSaida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saída"/>
+        </RadioGroup>
 
         <Button
             android:id="@+id/btnSalvarLancamento"

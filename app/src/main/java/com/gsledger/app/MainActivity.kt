@@ -3,7 +3,6 @@ package com.gsledger.app
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -20,11 +19,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, AddTransactionActivity::class.java))
         }
 
+        // 📊 AGORA ABRE A TELA DE RESUMO
         btnVerResumo.setOnClickListener {
-            Toast.makeText(this, "Resumo financeiro (em breve)", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, ResumoActivity::class.java))
         }
 
-        // 🔥 AGORA O BOTÃO VAI ABRIR A CÂMERA
         btnEscanearQR.setOnClickListener {
             startActivity(Intent(this, QrScannerActivity::class.java))
         }

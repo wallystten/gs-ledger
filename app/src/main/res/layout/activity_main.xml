@@ -44,13 +44,21 @@
         android:textColor="@android:color/white"/>
 
     <Button
-    android:id="@+id/btnEscanearQR"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Escanear QR Code"
-    android:layout_marginTop="12dp"
-    android:backgroundTint="#FF9800"
-    android:textColor="@android:color/white"/>
+        android:id="@+id/btnEscanearQR"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Escanear QR Code"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#FF9800"
+        android:textColor="@android:color/white"/>
 
-    
+    <Button
+        android:id="@+id/btnAtivarNotif"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ativar leitura de notificações"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#2196F3"
+        android:textColor="@android:color/white"/>
+
 </LinearLayout>

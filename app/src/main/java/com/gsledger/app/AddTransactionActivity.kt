@@ -40,3 +40,4 @@ class AddTransactionActivity : AppCompatActivity() {
         }
     }
 }
+  

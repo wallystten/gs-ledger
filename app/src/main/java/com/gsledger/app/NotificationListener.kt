@@ -14,12 +14,14 @@ class NotificationListener : NotificationListenerService() {
         val mensagemCompleta = "$title $text"
 
         val valor = extrairValor(mensagemCompleta)
+        val tipo = detectarTipo(mensagemCompleta)
 
         if (valor != null) {
             Storage.saveTransaction(
                 applicationContext,
                 "Lançamento automático",
-                valor
+                valor,
+                tipo
             )
         }
     }
@@ -27,11 +29,16 @@ class NotificationListener : NotificationListenerService() {
     private fun extrairValor(texto: String): String? {
         val regex = Pattern.compile("""R\$\s?([0-9]+[.,][0-9]{2})""")
         val matcher = regex.matcher(texto)
+        return if (matcher.find()) matcher.group(1) else null
+    }
 
-        return if (matcher.find()) {
-            matcher.group(1)
-        } else {
-            null
+    private fun detectarTipo(texto: String): String {
+        val t = texto.lowercase()
+
+        return when {
+            t.contains("recebido") || t.contains("pix recebido") || t.contains("deposito") -> "entrada"
+            t.contains("enviado") || t.contains("compra") || t.contains("pagamento") || t.contains("debito") -> "saida"
+            else -> "saida" // padrão segurança
         }
     }
 }

@@ -12,6 +12,7 @@ class ResumoActivity : AppCompatActivity() {
 
     private lateinit var listView: ListView
     private lateinit var tvTotal: TextView
+    private lateinit var tvDicas: TextView
     private lateinit var transacoes: JSONArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +20,7 @@ class ResumoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_resumo)
 
         tvTotal = findViewById(R.id.tvTotal)
+        tvDicas = findViewById(R.id.tvDicas)
         listView = findViewById(R.id.listViewTransacoes)
 
         carregarLista()
@@ -65,6 +67,10 @@ class ResumoActivity : AppCompatActivity() {
 
         tvTotal.text = "Entradas: R$ %.2f\nSaídas: R$ %.2f\nSaldo: R$ %.2f"
             .format(totalEntradas, totalSaidas, saldo)
+
+        // 💡 Gerar dicas inteligentes
+        val dicas = FinancialAdvisor.gerarDicas(transacoes)
+        tvDicas.text = dicas.joinToString("\n\n")
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, lista)
         listView.adapter = adapter

@@ -47,3 +47,4 @@ class ResumoActivity : AppCompatActivity() {
         listView.adapter = adapter
     }
 }
+  

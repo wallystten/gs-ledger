@@ -11,7 +11,7 @@ object Storage {
     private const val PREF_NAME = "GS_LEDGER_PREFS"
     private const val KEY_TRANSACTIONS = "transactions"
 
-    fun saveTransaction(context: Context, descricao: String, valor: String) {
+    fun saveTransaction(context: Context, descricao: String, valor: String, tipo: String) {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val jsonArray = JSONArray(prefs.getString(KEY_TRANSACTIONS, "[]"))
 
@@ -22,6 +22,7 @@ object Storage {
             put("descricao", descricao)
             put("valor", valor)
             put("data", dataAtual)
+            put("tipo", tipo)
         }
 
         jsonArray.put(transaction)

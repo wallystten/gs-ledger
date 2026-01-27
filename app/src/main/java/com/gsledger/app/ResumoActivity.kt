@@ -1,5 +1,6 @@
 package com.gsledger.app
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -9,14 +10,36 @@ import org.json.JSONArray
 
 class ResumoActivity : AppCompatActivity() {
 
+    private lateinit var listView: ListView
+    private lateinit var tvTotal: TextView
+    private lateinit var transacoes: JSONArray
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resumo)
 
-        val tvTotal = findViewById<TextView>(R.id.tvTotal)
-        val listView = findViewById<ListView>(R.id.listViewTransacoes)
+        tvTotal = findViewById(R.id.tvTotal)
+        listView = findViewById(R.id.listViewTransacoes)
 
-        val transacoes: JSONArray = Storage.getTransactions(this)
+        carregarLista()
+
+        // 🗑️ Excluir ao segurar o item
+        listView.setOnItemLongClickListener { _, _, position, _ ->
+            AlertDialog.Builder(this)
+                .setTitle("Excluir lançamento")
+                .setMessage("Deseja remover este lançamento?")
+                .setPositiveButton("Excluir") { _, _ ->
+                    Storage.deleteTransaction(this, position)
+                    carregarLista()
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+            true
+        }
+    }
+
+    private fun carregarLista() {
+        transacoes = Storage.getTransactions(this)
         val lista = mutableListOf<String>()
 
         var totalEntradas = 0.0
@@ -27,7 +50,7 @@ class ResumoActivity : AppCompatActivity() {
             val descricao = item.getString("descricao")
             val valor = item.getString("valor").replace(",", ".").toDoubleOrNull() ?: 0.0
             val data = item.getString("data")
-            val tipo = item.optString("tipo", "saida") // padrão saída para lançamentos antigos
+            val tipo = item.optString("tipo", "saida")
 
             if (tipo == "entrada") {
                 totalEntradas += valor
@@ -47,4 +70,3 @@ class ResumoActivity : AppCompatActivity() {
         listView.adapter = adapter
     }
 }
-  

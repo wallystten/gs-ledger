@@ -1,55 +1,54 @@
-package com.gsledger.app
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bg_item_transacao">
 
-import android.content.Context
-import android.graphics.Color
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.TextView
-import org.json.JSONArray
-import java.text.NumberFormat
-import java.util.*
+    <!-- LADO ESQUERDO -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-class TransactionAdapter(
-    private val context: Context,
-    private val transacoes: JSONArray
-) : BaseAdapter() {
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descrição"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#222222"/>
 
-    override fun getCount(): Int = transacoes.length()
-    override fun getItem(position: Int): Any = transacoes.getJSONObject(position)
-    override fun getItemId(position: Int): Long = position.toLong()
+        <TextView
+            android:id="@+id/tvOrigem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Origem: Banco"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginTop="2dp"/>
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view = convertView ?: LayoutInflater.from(context)
-            .inflate(R.layout.item_transacao, parent, false)
+        <TextView
+            android:id="@+id/tvData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="28/01/2026 12:49"
+            android:textSize="12sp"
+            android:textColor="#999999"
+            android:layout_marginTop="2dp"/>
+    </LinearLayout>
 
-        val item = transacoes.getJSONObject(position)
-
-        val descricao = item.optString("descricao", "Sem descrição")
-        val valor = item.optString("valor", "0").replace(",", ".").toDoubleOrNull() ?: 0.0
-        val data = item.optString("data", "")
-        val tipo = item.optString("tipo", "saida")
-        val origem = item.optString("origem", "Manual")
-
-        val tvTitulo = view.findViewById<TextView>(R.id.tvTitulo)
-        val tvOrigem = view.findViewById<TextView>(R.id.tvOrigem)
-        val tvData = view.findViewById<TextView>(R.id.tvData)
-        val tvValor = view.findViewById<TextView>(R.id.tvValor)
-
-        val formatador = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
-
-        tvTitulo.text = descricao
-        tvOrigem.text = "Origem: $origem"
-        tvData.text = data
-        tvValor.text = formatador.format(valor)
-
-        if (tipo == "entrada") {
-            tvValor.setTextColor(Color.parseColor("#2E7D32")) // verde
-        } else {
-            tvValor.setTextColor(Color.parseColor("#C62828")) // vermelho
-        }
-
-        return view
-    }
-}
+    <!-- VALOR À DIREITA -->
+    <TextView
+        android:id="@+id/tvValor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="R$ 0,00"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_vertical"/>
+</LinearLayout>

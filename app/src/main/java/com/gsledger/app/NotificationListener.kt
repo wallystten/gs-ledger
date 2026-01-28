@@ -34,30 +34,41 @@ class NotificationListener : NotificationListenerService() {
     }
 
     private fun detectarTipo(texto: String): String {
-        val t = texto.lowercase()
+    val t = texto.lowercase()
 
-        return when {
-            // 🟢 ENTRADAS
-            t.contains("recebido") ||
-            t.contains("pix recebido") ||
-            t.contains("valor creditado") ||
-            t.contains("creditado") ||
-            t.contains("transferência recebida") ||
-            t.contains("ted recebida") ||
-            t.contains("deposito") ||
-            t.contains("depósito") -> "entrada"
+    // 🟢 ENTRADAS (dinheiro entrando)
+    val palavrasEntrada = listOf(
+        "recebeu um pix",
+        "pix recebido",
+        "valor creditado",
+        "creditado em sua conta",
+        "transferência recebida",
+        "ted recebida",
+        "depósito recebido",
+        "deposito recebido",
+        "você recebeu"
+    )
 
-            // 🔴 SAÍDAS
-            t.contains("enviado") ||
-            t.contains("pix enviado") ||
-            t.contains("pagamento") ||
-            t.contains("compra") ||
-            t.contains("débito") ||
-            t.contains("debito") ||
-            t.contains("transferência enviada") ||
-            t.contains("ted enviada") -> "saida"
+    // 🔴 SAÍDAS (dinheiro saindo)
+    val palavrasSaida = listOf(
+        "pix enviado",
+        "você enviou",
+        "pagamento realizado",
+        "compra no valor",
+        "débito realizado",
+        "debito realizado",
+        "transferência enviada",
+        "ted enviada",
+        "pagamento de"
+    )
 
-            else -> "saida" // padrão segurança
-        }
+    if (palavrasEntrada.any { t.contains(it) }) return "entrada"
+    if (palavrasSaida.any { t.contains(it) }) return "saida"
+
+    // 🔍 Regra extra de segurança:
+    // Se tiver a palavra PIX mas não disser enviado/pagamento, assumimos entrada
+    if (t.contains("pix") && !t.contains("enviado") && !t.contains("pagamento"))
+        return "entrada"
+
+    return "saida"
     }
-}

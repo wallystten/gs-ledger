@@ -41,10 +41,20 @@ class AddTransactionActivity : AppCompatActivity() {
             "saida" -> rbSaida.isChecked = true
         }
 
+        // 🛡️ Segurança: se nada foi marcado, assume SAÍDA (padrão mais seguro)
+        if (!rbEntrada.isChecked && !rbSaida.isChecked) {
+            rbSaida.isChecked = true
+        }
+
         btnSalvar.setOnClickListener {
-            val descricao = etDescricao.text.toString()
-            val valor = etValor.text.toString()
-            val tipo = if (rbEntrada.isChecked) "entrada" else "saida"
+            val descricao = etDescricao.text.toString().trim()
+            val valor = etValor.text.toString().trim()
+
+            val tipo = when {
+                rbEntrada.isChecked -> "entrada"
+                rbSaida.isChecked -> "saida"
+                else -> "saida"
+            }
 
             if (descricao.isEmpty() || valor.isEmpty()) {
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()

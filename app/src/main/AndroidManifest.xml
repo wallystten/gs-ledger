@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Permissão da câmera para leitura de QR -->
+    <!-- 📷 Permissão da câmera para leitura de QR -->
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- 🌐 Necessária para buscar valor da NFC-e na SEFAZ -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"

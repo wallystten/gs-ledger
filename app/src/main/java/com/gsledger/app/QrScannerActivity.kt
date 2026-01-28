@@ -13,6 +13,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
+import kotlinx.coroutines.*
+import java.net.URL
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -75,7 +77,7 @@ class QrScannerActivity : AppCompatActivity() {
                     val rawValue = barcode.rawValue ?: continue
 
                     runOnUiThread {
-                        abrirTelaLancamento(rawValue)
+                        tratarQrLido(rawValue)
                     }
                     break
                 }
@@ -85,34 +87,35 @@ class QrScannerActivity : AppCompatActivity() {
             }
     }
 
-    private fun abrirTelaLancamento(codigoQr: String) {
-        val intent = Intent(this, AddTransactionActivity::class.java)
+    private fun tratarQrLido(codigoQr: String) {
 
         // 🔵 PIX
         val valorPix = extrairValorPix(codigoQr)
         if (valorPix != null) {
-            intent.putExtra("qrValue", valorPix)
-            intent.putExtra("tipoAuto", "entrada")
-            startActivity(intent)
-            finish()
+            abrirTelaLancamento(valorPix, "entrada", "PIX recebido")
             return
         }
 
         // 🧾 NFC-e (nota fiscal)
-        if (codigoQr.contains("nfce") || codigoQr.contains("fazenda") || codigoQr.contains("nfe")) {
+        if (codigoQr.contains("nfce") || codigoQr.contains("fazenda")) {
             buscarValorNfce(codigoQr)
             return
         }
 
-        // ❓ Outro QR
-        intent.putExtra("qrValue", "")
+        abrirTelaLancamento("", "saida", "")
+    }
+
+    private fun abrirTelaLancamento(valor: String, tipo: String, descricao: String) {
+        val intent = Intent(this, AddTransactionActivity::class.java)
+        intent.putExtra("qrValue", valor)
+        intent.putExtra("tipoAuto", tipo)
+        intent.putExtra("descricaoAuto", descricao)
         startActivity(intent)
         finish()
     }
 
     /**
-     * 🔍 Extrai valor do QR Pix padrão EMV
-     * Campo 54 = valor da transação
+     * 🔍 Extrai valor do QR Pix
      */
     private fun extrairValorPix(codigo: String): String? {
         return try {
@@ -135,36 +138,25 @@ class QrScannerActivity : AppCompatActivity() {
     }
 
     /**
-     * 🌐 Busca valor da NFC-e direto no site da SEFAZ
+     * 🌐 Busca o valor total da NFC-e direto no site da SEFAZ
      */
-    private fun buscarValorNfce(url: String) {
-        Thread {
+    private fun buscarValorNfce(urlNota: String) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
-                val html = java.net.URL(url).readText()
+                val html = URL(urlNota).readText()
 
-                val regex = Regex("""Valor\s+Total.*?R\$\s?([0-9\.,]+)""", RegexOption.IGNORE_CASE)
+                val regex = Regex("Valor Total.*?R\\$\\s?([0-9,.]+)")
                 val match = regex.find(html)
-                val valor = match?.groups?.get(1)?.value ?: ""
+                val valor = match?.groupValues?.get(1)?.replace(".", ",") ?: ""
 
-                runOnUiThread {
-                    val intent = Intent(this, AddTransactionActivity::class.java)
-                    intent.putExtra("qrValue", valor)
-                    intent.putExtra("descricaoAuto", "Compra via NFC-e")
-                    intent.putExtra("tipoAuto", "saida")
-                    startActivity(intent)
-                    finish()
+                withContext(Dispatchers.Main) {
+                    abrirTelaLancamento(valor, "saida", "Compra via NFC-e")
                 }
-
             } catch (e: Exception) {
-                runOnUiThread {
-                    val intent = Intent(this, AddTransactionActivity::class.java)
-                    intent.putExtra("qrValue", "")
-                    intent.putExtra("descricaoAuto", "Compra via NFC-e")
-                    intent.putExtra("tipoAuto", "saida")
-                    startActivity(intent)
-                    finish()
+                withContext(Dispatchers.Main) {
+                    abrirTelaLancamento("", "saida", "Compra via NFC-e")
                 }
             }
-        }.start()
+        }
     }
 }

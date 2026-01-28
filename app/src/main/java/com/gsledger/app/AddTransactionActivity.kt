@@ -19,10 +19,26 @@ class AddTransactionActivity : AppCompatActivity() {
         val rbSaida = findViewById<RadioButton>(R.id.rbSaida)
         val btnSalvar = findViewById<Button>(R.id.btnSalvarLancamento)
 
+        // 📥 DADOS VINDOS DO QR
         val qrValue = intent.getStringExtra("qrValue")
+        val tipoAuto = intent.getStringExtra("tipoAuto")
+        val descricaoAuto = intent.getStringExtra("descricaoAuto")
+
+        // 💰 Preenche valor automaticamente
         if (!qrValue.isNullOrEmpty()) {
             val valorLimpo = qrValue.filter { it.isDigit() || it == '.' || it == ',' }
             etValor.setText(valorLimpo)
+        }
+
+        // 📝 Preenche descrição automática (ex: NFC-e)
+        if (!descricaoAuto.isNullOrEmpty()) {
+            etDescricao.setText(descricaoAuto)
+        }
+
+        // 🔄 Marca entrada ou saída automaticamente
+        when (tipoAuto) {
+            "entrada" -> rbEntrada.isChecked = true
+            "saida" -> rbSaida.isChecked = true
         }
 
         btnSalvar.setOnClickListener {
@@ -40,4 +56,3 @@ class AddTransactionActivity : AppCompatActivity() {
         }
     }
 }
-  

@@ -1,9 +1,7 @@
 package com.gsledger.app
 
 import android.app.AlertDialog
-import android.graphics.Color
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +33,7 @@ class ResumoActivity : AppCompatActivity() {
 
         carregarLista()
 
+        // 🗑️ Excluir ao segurar
         listView.setOnItemLongClickListener { _, _, position, _ ->
             AlertDialog.Builder(this)
                 .setTitle("Excluir lançamento")
@@ -51,47 +50,39 @@ class ResumoActivity : AppCompatActivity() {
 
     private fun carregarLista() {
         transacoes = Storage.getTransactions(this)
-        val lista = mutableListOf<String>()
 
         var totalEntradas = 0.0
         var totalSaidas = 0.0
 
-        val formatadorMoeda = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
-
         for (i in 0 until transacoes.length()) {
             val item = transacoes.getJSONObject(i)
+            val valor = item.optString("valor", "0")
+                .replace(",", ".")
+                .toDoubleOrNull() ?: 0.0
 
-            val descricao = item.optString("descricao", "Sem descrição")
-            val valor = item.optString("valor", "0").replace(",", ".").toDoubleOrNull() ?: 0.0
-            val data = item.optString("data", "")
             val tipo = item.optString("tipo", "saida")
-            val origem = item.optString("origem", "Manual")
 
-            val valorFormatado = formatadorMoeda.format(valor)
-
-            val linha = if (tipo == "entrada") {
-                totalEntradas += valor
-                "📈 ENTRADA • $valorFormatado\nOrigem: $origem\nDescrição: $descricao\n$data"
-            } else {
-                totalSaidas += valor
-                "📉 SAÍDA • $valorFormatado\nOrigem: $origem\nDescrição: $descricao\n$data"
-            }
-
-            lista.add(linha)
+            if (tipo == "entrada") totalEntradas += valor
+            else totalSaidas += valor
         }
 
         val saldo = totalEntradas - totalSaidas
+        val formatador = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
 
-        tvTotal.text = "Entradas: ${formatadorMoeda.format(totalEntradas)}\n" +
-                "Saídas: ${formatadorMoeda.format(totalSaidas)}\n" +
-                "Saldo: ${formatadorMoeda.format(saldo)}"
+        tvTotal.text =
+            "Entradas: ${formatador.format(totalEntradas)}\n" +
+            "Saídas: ${formatador.format(totalSaidas)}\n" +
+            "Saldo: ${formatador.format(saldo)}"
 
+        // 💡 Dicas financeiras
         val dicas = FinancialAdvisor.gerarDicas(transacoes)
         tvDicas.text = dicas.joinToString("\n\n")
 
+        // 📊 Gráfico
         mostrarGrafico(totalEntradas, totalSaidas)
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, lista)
+        // 🧾 LISTA BONITA (extrato)
+        val adapter = TransactionAdapter(this, transacoes)
         listView.adapter = adapter
     }
 

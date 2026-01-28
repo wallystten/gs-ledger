@@ -9,7 +9,7 @@ class NotificationListener : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
 
-        val pacote = sbn.packageName
+        val pacote = sbn.packageName.lowercase()
 
         // 🔎 Só processa notificações de apps bancários conhecidos
         if (!pacote.contains("santander") &&
@@ -35,15 +35,31 @@ class NotificationListener : NotificationListenerService() {
 
         val valor = extrairValor(mensagemCompleta)
         val tipo = detectarTipo(mensagemCompleta)
+        val banco = detectarBanco(pacote)
 
         if (valor != null) {
             Storage.saveTransaction(
                 applicationContext,
                 "Movimentação bancária",
                 valor,
-                tipo
+                tipo,
+                banco // 🆕 AGORA SALVA A ORIGEM
             )
-            Log.d("GS_LEDGER_NOTIF", "SALVO: R$ $valor | TIPO: $tipo")
+            Log.d("GS_LEDGER_NOTIF", "SALVO: R$ $valor | TIPO: $tipo | BANCO: $banco")
+        }
+    }
+
+    private fun detectarBanco(pacote: String): String {
+        return when {
+            pacote.contains("santander") -> "Santander"
+            pacote.contains("itau") -> "Itaú"
+            pacote.contains("bradesco") -> "Bradesco"
+            pacote.contains("bb") -> "Banco do Brasil"
+            pacote.contains("caixa") -> "Caixa"
+            pacote.contains("inter") -> "Banco Inter"
+            pacote.contains("nubank") -> "Nubank"
+            pacote.contains("sicredi") -> "Sicredi"
+            else -> "Banco"
         }
     }
 

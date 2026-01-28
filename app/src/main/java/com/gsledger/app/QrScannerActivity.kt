@@ -88,23 +88,24 @@ class QrScannerActivity : AppCompatActivity() {
     private fun abrirTelaLancamento(codigoQr: String) {
         val intent = Intent(this, AddTransactionActivity::class.java)
 
-        // 🔵 É um QR PIX?
+        // 🔵 PIX
         val valorPix = extrairValorPix(codigoQr)
         if (valorPix != null) {
             intent.putExtra("qrValue", valorPix)
-            intent.putExtra("tipoAuto", "entrada") // PIX geralmente recebimento
-        }
-        // 🧾 É QR de NOTA FISCAL (NFC-e)?
-        else if (codigoQr.contains("nfce") || codigoQr.contains("fazenda") || codigoQr.contains("nfe")) {
-            intent.putExtra("qrValue", "")
-            intent.putExtra("descricaoAuto", "Compra via NFC-e")
-            intent.putExtra("tipoAuto", "saida") // COMPRA = SAÍDA
-        }
-        // ❓ Outro QR qualquer
-        else {
-            intent.putExtra("qrValue", "")
+            intent.putExtra("tipoAuto", "entrada")
+            startActivity(intent)
+            finish()
+            return
         }
 
+        // 🧾 NFC-e (nota fiscal)
+        if (codigoQr.contains("nfce") || codigoQr.contains("fazenda") || codigoQr.contains("nfe")) {
+            buscarValorNfce(codigoQr)
+            return
+        }
+
+        // ❓ Outro QR
+        intent.putExtra("qrValue", "")
         startActivity(intent)
         finish()
     }
@@ -127,9 +128,43 @@ class QrScannerActivity : AppCompatActivity() {
 
                 i += 4 + tamanho
             }
-            null // QR sem valor fixo
+            null
         } catch (e: Exception) {
             null
         }
+    }
+
+    /**
+     * 🌐 Busca valor da NFC-e direto no site da SEFAZ
+     */
+    private fun buscarValorNfce(url: String) {
+        Thread {
+            try {
+                val html = java.net.URL(url).readText()
+
+                val regex = Regex("""Valor\s+Total.*?R\$\s?([0-9\.,]+)""", RegexOption.IGNORE_CASE)
+                val match = regex.find(html)
+                val valor = match?.groups?.get(1)?.value ?: ""
+
+                runOnUiThread {
+                    val intent = Intent(this, AddTransactionActivity::class.java)
+                    intent.putExtra("qrValue", valor)
+                    intent.putExtra("descricaoAuto", "Compra via NFC-e")
+                    intent.putExtra("tipoAuto", "saida")
+                    startActivity(intent)
+                    finish()
+                }
+
+            } catch (e: Exception) {
+                runOnUiThread {
+                    val intent = Intent(this, AddTransactionActivity::class.java)
+                    intent.putExtra("qrValue", "")
+                    intent.putExtra("descricaoAuto", "Compra via NFC-e")
+                    intent.putExtra("tipoAuto", "saida")
+                    startActivity(intent)
+                    finish()
+                }
+            }
+        }.start()
     }
 }

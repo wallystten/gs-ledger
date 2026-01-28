@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- 📷 Permissão da câmera para leitura de QR -->
+    <!-- 📷 Câmera para leitura de QR -->
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- 🌐 Necessária para buscar valor da NFC-e na SEFAZ -->
+    <!-- 🌐 Internet para buscar valor da NFC-e na SEFAZ -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,6 +13,7 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <activity
@@ -36,11 +37,12 @@
             android:name=".ResumoActivity"
             android:exported="false" />
 
-        <!-- 🔔 Serviço para ler notificações dos bancos -->
+        <!-- 🔔 Serviço que lê notificações bancárias -->
         <service
             android:name=".NotificationListener"
+            android:label="GS Ledger Notificações"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>

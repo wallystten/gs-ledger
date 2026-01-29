@@ -34,6 +34,7 @@ class TransactionAdapter(
         val data = item.optString("data", "")
         val tipo = item.optString("tipo", "saida")
         val origem = item.optString("origem", "Manual")
+        val categoria = item.optString("categoria", "Outros") // 🆕 NOVO
 
         val tvTitulo = view.findViewById<TextView>(R.id.tvTitulo)
         val tvOrigem = view.findViewById<TextView>(R.id.tvOrigem)
@@ -41,11 +42,10 @@ class TransactionAdapter(
         val tvValor = view.findViewById<TextView>(R.id.tvValor)
 
         val valor = converterValorSeguro(item.optString("valor", "0"))
-
         val formatador = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
 
         tvTitulo.text = descricao
-        tvOrigem.text = "Origem: $origem"
+        tvOrigem.text = "Origem: $origem  •  Categoria: $categoria" // 🆕 EXIBE CATEGORIA
         tvData.text = data
         tvValor.text = formatador.format(valor)
 
@@ -89,4 +89,3 @@ class TransactionAdapter(
         }
     }
 }
-  

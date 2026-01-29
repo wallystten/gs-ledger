@@ -1,83 +1,88 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="24dp"
-    android:background="#F5F6FA">
+package com.gsledger.app
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Adicionar Lançamento"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#1B1F3B"
-            android:layout_marginBottom="20dp"/>
+class AddTransactionActivity : AppCompatActivity() {
 
-        <EditText
-            android:id="@+id/etDescricao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Descrição"
-            android:layout_marginBottom="12dp"
-            android:backgroundTint="#1B1F3B"/>
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_add_transaction)
 
-        <EditText
-            android:id="@+id/etValor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Valor"
-            android:inputType="numberDecimal"
-            android:layout_marginBottom="12dp"
-            android:backgroundTint="#1B1F3B"/>
+        val etDescricao = findViewById<EditText>(R.id.etDescricao)
+        val etValor = findViewById<EditText>(R.id.etValor)
+        val rbEntrada = findViewById<RadioButton>(R.id.rbEntrada)
+        val rbSaida = findViewById<RadioButton>(R.id.rbSaida)
+        val btnSalvar = findViewById<Button>(R.id.btnSalvarLancamento)
+        val spCategoria = findViewById<Spinner>(R.id.spCategoria)
 
-        <!-- 🗂️ CATEGORIA DO GASTO/ENTRADA -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Categoria"
-            android:textStyle="bold"
-            android:textColor="#1B1F3B"
-            android:layout_marginBottom="4dp"/>
+        // 📂 LISTA DE CATEGORIAS
+        val categorias = listOf(
+            "Alimentação",
+            "Transporte",
+            "Moradia",
+            "Contas",
+            "Lazer",
+            "Saúde",
+            "Educação",
+            "Salário",
+            "Investimentos",
+            "Outros"
+        )
 
-        <Spinner
-            android:id="@+id/spCategoria"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+        val adapterCategorias = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            categorias
+        )
+        spCategoria.adapter = adapterCategorias
 
-        <!-- 🔘 Seleção de Entrada ou Saída -->
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="20dp">
+        // 📥 DADOS VINDOS DO QR OU NOTIFICAÇÃO
+        val qrValue = intent.getStringExtra("qrValue")
+        val tipoAuto = intent.getStringExtra("tipoAuto")
+        val descricaoAuto = intent.getStringExtra("descricaoAuto")
+        val origemAuto = intent.getStringExtra("origemAuto")
 
-            <RadioButton
-                android:id="@+id/rbEntrada"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Entrada"
-                android:checked="true"/>
+        if (!qrValue.isNullOrEmpty()) {
+            val valorLimpo = qrValue.filter { it.isDigit() || it == '.' || it == ',' }
+            etValor.setText(valorLimpo)
+        }
 
-            <RadioButton
-                android:id="@+id/rbSaida"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Saída"/>
-        </RadioGroup>
+        if (!descricaoAuto.isNullOrEmpty()) {
+            etDescricao.setText(descricaoAuto)
+        }
 
-        <Button
-            android:id="@+id/btnSalvarLancamento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Salvar Lançamento"
-            android:backgroundTint="#1B1F3B"
-            android:textColor="@android:color/white"/>
-    </LinearLayout>
-</ScrollView>
+        when (tipoAuto) {
+            "entrada" -> rbEntrada.isChecked = true
+            "saida" -> rbSaida.isChecked = true
+        }
+
+        if (!rbEntrada.isChecked && !rbSaida.isChecked) {
+            rbSaida.isChecked = true
+        }
+
+        btnSalvar.setOnClickListener {
+            val descricao = etDescricao.text.toString().trim()
+            val valor = etValor.text.toString().trim()
+            val categoria = spCategoria.selectedItem.toString()
+
+            val tipo = if (rbEntrada.isChecked) "entrada" else "saida"
+
+            if (descricao.isEmpty() || valor.isEmpty()) {
+                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+            } else {
+                Storage.saveTransaction(
+                    context = this,
+                    descricao = descricao,
+                    valor = valor,
+                    tipo = tipo,
+                    origem = origemAuto ?: "Manual",
+                    categoria = categoria // 🆕 SALVANDO CATEGORIA
+                )
+                Toast.makeText(this, "Lançamento salvo!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+    }
+}

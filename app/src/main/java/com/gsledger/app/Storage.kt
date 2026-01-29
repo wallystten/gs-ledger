@@ -18,16 +18,28 @@ object Storage {
         valor: String,
         tipo: String
     ) {
-        saveTransaction(context, descricao, valor, tipo, "Manual")
+        saveTransaction(context, descricao, valor, tipo, "Manual", "Outros")
     }
 
-    // 🔹 MÉTODO NOVO (com origem)
+    // 🔹 MÉTODO COM ORIGEM
     fun saveTransaction(
         context: Context,
         descricao: String,
         valor: String,
         tipo: String,
         origem: String
+    ) {
+        saveTransaction(context, descricao, valor, tipo, origem, "Outros")
+    }
+
+    // 🔹 MÉTODO NOVO COMPLETO (origem + categoria)
+    fun saveTransaction(
+        context: Context,
+        descricao: String,
+        valor: String,
+        tipo: String,
+        origem: String,
+        categoria: String
     ) {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val jsonArray = JSONArray(prefs.getString(KEY_TRANSACTIONS, "[]"))
@@ -41,6 +53,7 @@ object Storage {
             put("data", dataAtual)
             put("tipo", tipo)
             put("origem", origem)
+            put("categoria", categoria) // 🆕 NOVO CAMPO
         }
 
         jsonArray.put(transaction)

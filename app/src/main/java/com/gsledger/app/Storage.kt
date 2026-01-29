@@ -11,13 +11,35 @@ object Storage {
     private const val PREF_NAME = "GS_LEDGER_PREFS"
     private const val KEY_TRANSACTIONS = "transactions"
 
+    // 🔹 MÉTODO ANTIGO (continua funcionando)
+    fun saveTransaction(
+        context: Context,
+        descricao: String,
+        valor: String,
+        tipo: String
+    ) {
+        saveTransaction(context, descricao, valor, tipo, "Manual", "Outros")
+    }
+
+    // 🔹 MÉTODO COM ORIGEM
     fun saveTransaction(
         context: Context,
         descricao: String,
         valor: String,
         tipo: String,
-        origem: String = "Manual",
-        categoria: String = "Geral"
+        origem: String
+    ) {
+        saveTransaction(context, descricao, valor, tipo, origem, "Outros")
+    }
+
+    // 🔹 MÉTODO NOVO COMPLETO (origem + categoria)
+    fun saveTransaction(
+        context: Context,
+        descricao: String,
+        valor: String,
+        tipo: String,
+        origem: String,
+        categoria: String
     ) {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val jsonArray = JSONArray(prefs.getString(KEY_TRANSACTIONS, "[]"))
@@ -31,7 +53,7 @@ object Storage {
             put("data", dataAtual)
             put("tipo", tipo)
             put("origem", origem)
-            put("categoria", categoria) // 🆕 NOVO CAMPO
+            put("categoria", categoria) // 🆕 SALVA CATEGORIA
         }
 
         jsonArray.put(transaction)
@@ -49,7 +71,11 @@ object Storage {
 
         val newArray = JSONArray()
         for (i in 0 until jsonArray.length()) {
-            if (i != index) newArray.put(jsonArray.getJSONObject(i))
+            newArray.put(jsonArray.getJSONObject(i))
+        }
+
+        if (index in 0 until newArray.length()) {
+            newArray.remove(index)
         }
 
         prefs.edit().putString(KEY_TRANSACTIONS, newArray.toString()).apply()

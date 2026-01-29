@@ -11,10 +11,11 @@ object Storage {
     private const val PREF_NAME = "GS_LEDGER_PREFS"
     private const val KEY_TRANSACTIONS = "transactions"
 
+    // 🔥 AGORA COM ORIGEM (mas compatível com versões antigas)
     fun saveTransaction(
         context: Context,
         descricao: String,
-        valorDigitado: String,
+        valor: String,
         tipo: String,
         origem: String = "Manual"
     ) {
@@ -24,18 +25,12 @@ object Storage {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         val dataAtual = dateFormat.format(Date())
 
-        // 🔥 CONVERTE QUALQUER FORMATO BR PARA PADRÃO 1100.00
-        val valorPadrao = valorDigitado
-            .replace(".", "")      // remove milhar
-            .replace(",", ".")     // vírgula vira ponto
-            .toDoubleOrNull() ?: 0.0
-
         val transaction = JSONObject().apply {
             put("descricao", descricao)
-            put("valor", valorPadrao) // 🔥 AGORA É DOUBLE PADRÃO
+            put("valor", valor)
             put("data", dataAtual)
             put("tipo", tipo)
-            put("origem", origem)
+            put("origem", origem) // 🆕 NOVO CAMPO
         }
 
         jsonArray.put(transaction)
@@ -53,7 +48,9 @@ object Storage {
 
         val newArray = JSONArray()
         for (i in 0 until jsonArray.length()) {
-            if (i != index) newArray.put(jsonArray.getJSONObject(i))
+            if (i != index) {
+                newArray.put(jsonArray.getJSONObject(i))
+            }
         }
 
         prefs.edit().putString(KEY_TRANSACTIONS, newArray.toString()).apply()

@@ -9,10 +9,18 @@ class NotificationListener : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
 
-        val pacote = sbn.packageName.lowercase()
+        val pacote = sbn.packageName
 
-        // 🏦 Detecta o banco pela notificação
-        val origemBanco = detectarBanco(pacote) ?: return
+        // 🔎 Só processa notificações de bancos conhecidos
+        if (!pacote.contains("santander") &&
+            !pacote.contains("itau") &&
+            !pacote.contains("bradesco") &&
+            !pacote.contains("bb") &&
+            !pacote.contains("caixa") &&
+            !pacote.contains("inter") &&
+            !pacote.contains("nubank") &&
+            !pacote.contains("sicredi")
+        ) return
 
         val extras = sbn.notification.extras
 
@@ -22,36 +30,21 @@ class NotificationListener : NotificationListenerService() {
 
         val mensagemCompleta = "$title $text $bigText"
 
-        Log.d("GS_LEDGER_NOTIF", "BANCO: $origemBanco | MSG: $mensagemCompleta")
+        Log.d("GS_LEDGER_NOTIF", "PACOTE: $pacote | MSG: $mensagemCompleta")
 
         val valor = extrairValor(mensagemCompleta)
         val tipo = detectarTipo(mensagemCompleta)
 
         if (valor != null) {
             Storage.saveTransaction(
-                applicationContext,
+                context = applicationContext,
                 descricao = "Movimentação bancária",
                 valor = valor,
                 tipo = tipo,
-                origem = origemBanco // 🔥 AQUI VAI O NOME DO BANCO
+                origem = "Notificação Bancária" // ✅ AGORA CORRETO
             )
 
-            Log.d("GS_LEDGER_NOTIF", "SALVO: $origemBanco | R$ $valor | $tipo")
-        }
-    }
-
-    // 🏦 Mapeia pacote → nome do banco
-    private fun detectarBanco(pacote: String): String? {
-        return when {
-            pacote.contains("santander") -> "Santander"
-            pacote.contains("nubank") -> "Nubank"
-            pacote.contains("itau") -> "Itaú"
-            pacote.contains("bradesco") -> "Bradesco"
-            pacote.contains("bb") -> "Banco do Brasil"
-            pacote.contains("caixa") -> "Caixa"
-            pacote.contains("inter") -> "Banco Inter"
-            pacote.contains("sicredi") -> "Sicredi"
-            else -> null // ignora apps que não são bancos
+            Log.d("GS_LEDGER_NOTIF", "SALVO: R$ $valor | TIPO: $tipo")
         }
     }
 

@@ -9,7 +9,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import org.json.JSONArray
 import java.text.NumberFormat
-import java.util.Locale
+import java.util.*
 
 class TransactionAdapter(
     private val context: Context,
@@ -17,9 +17,7 @@ class TransactionAdapter(
 ) : BaseAdapter() {
 
     override fun getCount(): Int = transacoes.length()
-
-    override fun getItem(position: Int) = transacoes.getJSONObject(position)
-
+    override fun getItem(position: Int): Any = transacoes.getJSONObject(position)
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -29,14 +27,24 @@ class TransactionAdapter(
         val item = transacoes.getJSONObject(position)
 
         val descricao = item.optString("descricao", "Sem descrição")
-        val valor = item.optString("valor", "0")
-            .replace(".", "")
-            .replace(",", ".")
-            .toDoubleOrNull() ?: 0.0
-
         val data = item.optString("data", "")
         val tipo = item.optString("tipo", "saida")
         val origem = item.optString("origem", "Manual")
+
+        // 🔥 CORREÇÃO DEFINITIVA DO VALOR
+        val valorString = item.optString("valor", "0")
+
+        val valor = try {
+            if (valorString.contains(",")) {
+                // Formato brasileiro: 1.234,56
+                valorString.replace(".", "").replace(",", ".").toDouble()
+            } else {
+                // Já está em formato padrão
+                valorString.toDouble()
+            }
+        } catch (e: Exception) {
+            0.0
+        }
 
         val tvTitulo = view.findViewById<TextView>(R.id.tvTitulo)
         val tvOrigem = view.findViewById<TextView>(R.id.tvOrigem)

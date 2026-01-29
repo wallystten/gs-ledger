@@ -9,9 +9,9 @@ class NotificationListener : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
 
-        val pacote = sbn.packageName
+        val pacote = sbn.packageName.lowercase()
 
-        // 🔎 Só processa notificações de bancos conhecidos
+        // 🔎 Só processa notificações de apps bancários conhecidos
         if (!pacote.contains("santander") &&
             !pacote.contains("itau") &&
             !pacote.contains("bradesco") &&
@@ -23,7 +23,6 @@ class NotificationListener : NotificationListenerService() {
         ) return
 
         val extras = sbn.notification.extras
-
         val title = extras.getString("android.title") ?: ""
         val text = extras.getCharSequence("android.text")?.toString() ?: ""
         val bigText = extras.getCharSequence("android.bigText")?.toString() ?: ""
@@ -32,20 +31,32 @@ class NotificationListener : NotificationListenerService() {
 
         Log.d("GS_LEDGER_NOTIF", "PACOTE: $pacote | MSG: $mensagemCompleta")
 
-        val valor = extrairValor(mensagemCompleta)
+        val valor = extrairValor(mensagemCompleta) ?: return
         val tipo = detectarTipo(mensagemCompleta)
 
-        if (valor != null) {
-            Storage.saveTransaction(
-                context = applicationContext,
-                descricao = "Movimentação bancária",
-                valor = valor,
-                tipo = tipo,
-                origem = "Notificação Bancária" // ✅ AGORA CORRETO
-            )
-
-            Log.d("GS_LEDGER_NOTIF", "SALVO: R$ $valor | TIPO: $tipo")
+        // 🏷️ Define a origem baseada no app
+        val origem = when {
+            pacote.contains("santander") -> "Santander"
+            pacote.contains("itau") -> "Itaú"
+            pacote.contains("bradesco") -> "Bradesco"
+            pacote.contains("bb") -> "Banco do Brasil"
+            pacote.contains("caixa") -> "Caixa"
+            pacote.contains("inter") -> "Banco Inter"
+            pacote.contains("nubank") -> "Nubank"
+            pacote.contains("sicredi") -> "Sicredi"
+            else -> "Banco"
         }
+
+        // ✅ CHAMADA CORRETA (SEM NOMEAR PARÂMETROS)
+        Storage.saveTransaction(
+            applicationContext,
+            "Movimentação bancária",
+            valor,
+            tipo,
+            origem
+        )
+
+        Log.d("GS_LEDGER_NOTIF", "SALVO: R$ $valor | TIPO: $tipo | ORIGEM: $origem")
     }
 
     private fun extrairValor(texto: String): String? {
@@ -58,30 +69,16 @@ class NotificationListener : NotificationListenerService() {
         val t = texto.lowercase()
 
         val palavrasSaida = listOf(
-            "pix enviado",
-            "seu pix foi enviado",
-            "você enviou",
-            "pagamento realizado",
-            "pagamento de",
-            "compra no valor",
-            "débito realizado",
-            "debito realizado",
-            "transferência enviada",
-            "ted enviada",
-            "você pagou",
-            "pagou um pix",
-            "pix pago"
+            "pix enviado", "você enviou", "pagamento realizado",
+            "pagamento de", "compra no valor", "débito realizado",
+            "debito realizado", "transferência enviada", "ted enviada",
+            "você pagou", "pix pago"
         )
 
         val palavrasEntrada = listOf(
-            "recebeu um pix",
-            "pix recebido",
-            "valor creditado",
-            "creditado em sua conta",
-            "transferência recebida",
-            "ted recebida",
-            "depósito recebido",
-            "deposito recebido",
+            "recebeu um pix", "pix recebido", "valor creditado",
+            "creditado em sua conta", "transferência recebida",
+            "ted recebida", "depósito recebido", "deposito recebido",
             "você recebeu"
         )
 

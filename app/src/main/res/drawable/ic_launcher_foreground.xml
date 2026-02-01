@@ -5,7 +5,19 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
+    <!-- Círculo dourado -->
+    <path
+        android:fillColor="#D4AF37"
+        android:pathData="M54,10
+                          A44,44 0 1,1 53.9,10Z"/>
+
+    <!-- Letra G estilizada -->
     <path
         android:fillColor="#1B1F3B"
-        android:pathData="M54,10 L98,98 H10 Z"/>
+        android:pathData="M54,28
+                          A26,26 0 1,0 80,54
+                          L68,54
+                          A14,14 0 1,1 54,40
+                          A14,14 0 0,1 66,46
+                          L54,46Z"/>
 </vector>

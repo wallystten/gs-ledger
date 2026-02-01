@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- 📷 Câmera para leitura de QR -->
     <uses-permission android:name="android.permission.CAMERA" />
-
-    <!-- 🌐 Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -25,23 +22,11 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".AddTransactionActivity"
-            android:exported="false" />
+        <activity android:name=".AddTransactionActivity" android:exported="false"/>
+        <activity android:name=".QrScannerActivity" android:exported="false"/>
+        <activity android:name=".ResumoActivity" android:exported="false"/>
+        <activity android:name=".SobreActivity" android:exported="false"/>
 
-        <activity
-            android:name=".QrScannerActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".ResumoActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".SobreActivity"
-            android:exported="false" />
-
-        <!-- 🔔 Serviço de leitura de notificações -->
         <service
             android:name=".NotificationListener"
             android:label="GS Ledger Notificações"
@@ -53,5 +38,4 @@
         </service>
 
     </application>
-
 </manifest>

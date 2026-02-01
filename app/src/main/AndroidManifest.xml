@@ -4,7 +4,7 @@
     <!-- 📷 Câmera para leitura de QR -->
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- 🌐 Internet para buscar valor da NFC-e na SEFAZ -->
+    <!-- 🌐 Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -37,12 +37,11 @@
             android:name=".ResumoActivity"
             android:exported="false" />
 
-        <!-- 🆕 Tela Sobre / Privacidade -->
         <activity
             android:name=".SobreActivity"
             android:exported="false" />
 
-        <!-- 🔔 Serviço que lê notificações bancárias -->
+        <!-- 🔔 Serviço de leitura de notificações -->
         <service
             android:name=".NotificationListener"
             android:label="GS Ledger Notificações"

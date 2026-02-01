@@ -37,6 +37,11 @@
             android:name=".ResumoActivity"
             android:exported="false" />
 
+        <!-- 🆕 Tela Sobre / Privacidade -->
+        <activity
+            android:name=".SobreActivity"
+            android:exported="false" />
+
         <!-- 🔔 Serviço que lê notificações bancárias -->
         <service
             android:name=".NotificationListener"

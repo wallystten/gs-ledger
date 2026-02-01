@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#FFFFFF</color>
+
+    <!-- 🎨 Cor principal do app (usada no ícone adaptável) -->
+    <color name="ic_launcher_background">#1B1F3B</color>
+
+    <!-- Cores extras do tema (opcional, mas bom já ter) -->
+    <color name="colorPrimary">#1B1F3B</color>
+    <color name="colorPrimaryDark">#14172B</color>
+    <color name="colorAccent">#4CAF50</color>
+
 </resources>

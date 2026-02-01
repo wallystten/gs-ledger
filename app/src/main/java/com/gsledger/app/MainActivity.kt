@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         val btnVerResumo = findViewById<Button>(R.id.btnVerResumo)
         val btnEscanearQR = findViewById<Button>(R.id.btnEscanearQR)
         val btnAtivarNotif = findViewById<Button>(R.id.btnAtivarNotif)
-        val btnSobre = findViewById<Button>(R.id.btnSobre) // 🆕 NOVO BOTÃO
+        val btnSobre = findViewById<Button>(R.id.btnSobre)
 
         // ➕ Adicionar lançamento manual
         btnAdicionar.setOnClickListener {
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                 .setTitle("Permissão de Notificações")
                 .setMessage(
                     "Para registrar automaticamente movimentações bancárias, o GS Ledger precisa de acesso às notificações.\n\n" +
-                    "Esses dados são usados apenas no seu aparelho para organizar suas entradas e saídas financeiras.\n\n" +
+                    "Esses dados são utilizados apenas no seu aparelho para organizar suas entradas e saídas financeiras.\n\n" +
                     "O aplicativo não compartilha suas informações com terceiros."
                 )
                 .setPositiveButton("Continuar") { _, _ ->
@@ -61,16 +61,17 @@ class MainActivity : AppCompatActivity() {
                 .show()
         }
 
-        // ℹ️ SOBRE E PRIVACIDADE
+        // ℹ️ SOBRE E PRIVACIDADE (VERSÃO PROFISSIONAL)
         btnSobre.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Sobre o GS Ledger")
                 .setMessage(
-                    "O GS Ledger é um aplicativo de controle financeiro pessoal.\n\n" +
-                    "🔹 Seus dados ficam somente no seu aparelho.\n" +
+                    "O GS Ledger é um aplicativo de controle financeiro simples, criado para ajudar você a organizar suas entradas e saídas de dinheiro.\n\n" +
+                    "🔹 Seus dados ficam armazenados somente no seu aparelho.\n" +
                     "🔹 Não enviamos suas informações bancárias para servidores.\n" +
-                    "🔹 A leitura de notificações serve apenas para registrar automaticamente suas movimentações.\n\n" +
-                    "Versão 1.0"
+                    "🔹 A leitura de notificações é utilizada exclusivamente para registrar automaticamente suas movimentações financeiras.\n\n" +
+                    "Versão 1.0\n" +
+                    "Desenvolvido por Wallystten"
                 )
                 .setPositiveButton("OK", null)
                 .show()

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="#F5F6FA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sobre o GS Ledger"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#1B1F3B"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="O GS Ledger é um aplicativo de controle financeiro pessoal que ajuda você a organizar suas entradas e saídas de forma simples e rápida."
+            android:textSize="16sp"
+            android:textColor="#333"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Uso de Permissões"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#1B1F3B"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🔔 Notificações\nPara registrar automaticamente movimentações bancárias, o GS Ledger pode solicitar acesso às notificações. As informações são usadas apenas para identificar valores de entradas e saídas financeiras diretamente no seu aparelho."
+            android:textSize="15sp"
+            android:textColor="#333"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📷 Câmera\nA câmera é utilizada exclusivamente para leitura de QR Codes de pagamentos Pix e notas fiscais, facilitando o registro das transações."
+            android:textSize="15sp"
+            android:textColor="#333"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Privacidade"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#1B1F3B"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="O GS Ledger não compartilha seus dados financeiros com terceiros. Todas as informações ficam armazenadas apenas no seu dispositivo."
+            android:textSize="15sp"
+            android:textColor="#333"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Versão 1.0"
+            android:textSize="14sp"
+            android:textColor="#777"/>
+    </LinearLayout>
+</ScrollView>

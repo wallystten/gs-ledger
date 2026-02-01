@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val btnVerResumo = findViewById<Button>(R.id.btnVerResumo)
         val btnEscanearQR = findViewById<Button>(R.id.btnEscanearQR)
         val btnAtivarNotif = findViewById<Button>(R.id.btnAtivarNotif)
+        val btnSobre = findViewById<Button>(R.id.btnSobre) // 🆕 NOVO BOTÃO
 
         // ➕ Adicionar lançamento manual
         btnAdicionar.setOnClickListener {
@@ -46,7 +47,6 @@ class MainActivity : AppCompatActivity() {
 
         // 🔔 Ativar leitura de notificações (COM AVISO EXPLICATIVO)
         btnAtivarNotif.setOnClickListener {
-
             AlertDialog.Builder(this)
                 .setTitle("Permissão de Notificações")
                 .setMessage(
@@ -58,6 +58,21 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
                 }
                 .setNegativeButton("Cancelar", null)
+                .show()
+        }
+
+        // ℹ️ SOBRE E PRIVACIDADE
+        btnSobre.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Sobre o GS Ledger")
+                .setMessage(
+                    "O GS Ledger é um aplicativo de controle financeiro pessoal.\n\n" +
+                    "🔹 Seus dados ficam somente no seu aparelho.\n" +
+                    "🔹 Não enviamos suas informações bancárias para servidores.\n" +
+                    "🔹 A leitura de notificações serve apenas para registrar automaticamente suas movimentações.\n\n" +
+                    "Versão 1.0"
+                )
+                .setPositiveButton("OK", null)
                 .show()
         }
     }

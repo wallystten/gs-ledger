@@ -1,5 +1,6 @@
 package com.gsledger.app
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -43,9 +44,21 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, QrScannerActivity::class.java))
         }
 
-        // 🔔 Ativar leitura de notificações
+        // 🔔 Ativar leitura de notificações (COM AVISO EXPLICATIVO)
         btnAtivarNotif.setOnClickListener {
-            startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+
+            AlertDialog.Builder(this)
+                .setTitle("Permissão de Notificações")
+                .setMessage(
+                    "Para registrar automaticamente movimentações bancárias, o GS Ledger precisa de acesso às notificações.\n\n" +
+                    "Esses dados são usados apenas no seu aparelho para organizar suas entradas e saídas financeiras.\n\n" +
+                    "O aplicativo não compartilha suas informações com terceiros."
+                )
+                .setPositiveButton("Continuar") { _, _ ->
+                    startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
         }
     }
 }

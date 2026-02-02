@@ -20,11 +20,12 @@ import java.util.concurrent.Executors
 class QrScannerActivity : AppCompatActivity() {
 
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var previewView: PreviewView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val previewView = PreviewView(this)
+        previewView = PreviewView(this)
         setContentView(previewView)
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -33,11 +34,12 @@ class QrScannerActivity : AppCompatActivity() {
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 100)
         } else {
-            startCamera(previewView)
+            startCamera()
         }
     }
 
-    private fun startCamera(previewView: PreviewView) {
+    // 🔥 INICIA A CÂMERA
+    private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener({
@@ -64,6 +66,7 @@ class QrScannerActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
+    // 📷 PROCESSA IMAGEM DO QR
     private fun processImageProxy(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image ?: return
         val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
@@ -83,6 +86,23 @@ class QrScannerActivity : AppCompatActivity() {
             }
     }
 
+    // 🔐 PERMISSÃO DA CÂMERA — CORREÇÃO DO BUG DA TELA PRETA
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 100 && grantResults.isNotEmpty() &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startCamera()
+        } else {
+            finish()
+        }
+    }
+
+    // 🎯 TRATAMENTO DO QR
     private fun tratarCodigoQr(codigoQr: String) {
 
         // 🔵 QR PIX
@@ -122,7 +142,7 @@ class QrScannerActivity : AppCompatActivity() {
         intent.putExtra("qrValue", valor)
         intent.putExtra("tipoAuto", tipo)
         intent.putExtra("descricaoAuto", descricao)
-        intent.putExtra("origemAuto", origem) // 🆕 NOVO
+        intent.putExtra("origemAuto", origem)
         startActivity(intent)
         finish()
     }
@@ -152,13 +172,16 @@ class QrScannerActivity : AppCompatActivity() {
     private fun buscarValorNfce(urlNota: String): String? {
         return try {
             val html = URL(urlNota).readText()
-
             val regex = Regex("""Valor Total.*?R\$\s?([0-9\.,]+)""", RegexOption.IGNORE_CASE)
             val match = regex.find(html)
-
             match?.groupValues?.get(1)
         } catch (e: Exception) {
             null
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
     }
 }

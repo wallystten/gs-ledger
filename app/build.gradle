@@ -1,7 +1,7 @@
 plugins {
     id "com.android.application"
     id "org.jetbrains.kotlin.android"
-    id "com.google.gms.google-services"   // 🔥 ATIVA FIREBASE
+    id "com.google.gms.google-services"   // 🔥 FIREBASE
 }
 
 android {
@@ -49,6 +49,9 @@ dependencies {
     // 📊 GRÁFICOS
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
-    // 🔥 FIREBASE ANALYTICS (conta instalações e usuários)
+    // 🔥 FIREBASE ANALYTICS
     implementation 'com.google.firebase:firebase-analytics-ktx:21.5.0'
+
+    // 💰 GOOGLE ADMOB (ANÚNCIOS)
+    implementation 'com.google.android.gms:play-services-ads:23.1.0'
 }

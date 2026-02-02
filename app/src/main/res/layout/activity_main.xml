@@ -80,12 +80,12 @@
 
     </LinearLayout>
 
-    <!-- 💰 BANNER ADMOB FIXO EMBAIXO -->
+    <!-- 💰 BANNER ADMOB FIXO EMBAIXO (ID REAL) -->
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"/>
+        ads:adUnitId="ca-app-pub-2594852334966685/4574855893"/>
 
 </LinearLayout>

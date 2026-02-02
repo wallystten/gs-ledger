@@ -1,73 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center_horizontal"
     android:background="#F5F6FA">
 
-    <TextView
-        android:id="@+id/tituloApp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GS Ledger"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:textColor="#1B1F3B"
-        android:layout_marginTop="40dp"/>
+    <!-- CONTEÚDO PRINCIPAL -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Controle financeiro simples"
-        android:textSize="16sp"
-        android:textColor="#555"
-        android:layout_marginTop="8dp"/>
+        <TextView
+            android:id="@+id/tituloApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GS Ledger"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#1B1F3B"
+            android:layout_marginTop="40dp"/>
 
-    <Button
-        android:id="@+id/btnAdicionar"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Controle financeiro simples"
+            android:textSize="16sp"
+            android:textColor="#555"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/btnAdicionar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Adicionar Lançamento"
+            android:layout_marginTop="40dp"
+            android:backgroundTint="#1B1F3B"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:id="@+id/btnVerResumo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ver Resumo"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#4CAF50"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:id="@+id/btnEscanearQR"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Escanear QR Code"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#FF9800"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:id="@+id/btnAtivarNotif"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ativar leitura de notificações"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#2196F3"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:id="@+id/btnSobre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sobre e Privacidade"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#9C27B0"
+            android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+
+    <!-- 💰 BANNER ADMOB FIXO EMBAIXO -->
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Adicionar Lançamento"
-        android:layout_marginTop="40dp"
-        android:backgroundTint="#1B1F3B"
-        android:textColor="@android:color/white"/>
-
-    <Button
-        android:id="@+id/btnVerResumo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ver Resumo"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="#4CAF50"
-        android:textColor="@android:color/white"/>
-
-    <Button
-        android:id="@+id/btnEscanearQR"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Escanear QR Code"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="#FF9800"
-        android:textColor="@android:color/white"/>
-
-    <Button
-        android:id="@+id/btnAtivarNotif"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ativar leitura de notificações"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="#2196F3"
-        android:textColor="@android:color/white"/>
-
-    <Button
-        android:id="@+id/btnSobre"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sobre e Privacidade"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="#9C27B0"
-        android:textColor="@android:color/white"/>
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"/>
 
 </LinearLayout>

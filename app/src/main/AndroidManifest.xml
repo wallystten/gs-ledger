@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Permissões -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -13,6 +15,12 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
+        <!-- 🔥 ID DO ADMOB (OBRIGATÓRIO) -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2594852334966685~8722419239"/>
+
+        <!-- Activities -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -27,6 +35,7 @@
         <activity android:name=".ResumoActivity" android:exported="false"/>
         <activity android:name=".SobreActivity" android:exported="false"/>
 
+        <!-- Serviço de Notificações -->
         <service
             android:name=".NotificationListener"
             android:label="GS Ledger Notificações"

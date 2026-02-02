@@ -9,20 +9,31 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var adView: AdView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 🔥 INICIALIZA FIREBASE
+        // 🔥 FIREBASE
         FirebaseApp.initializeApp(this)
-
         val analytics = FirebaseAnalytics.getInstance(this)
         analytics.logEvent("app_aberto", null)
-
         Log.d("FIREBASE_TESTE", "Firebase conectado com sucesso!")
+
+        // 💰 INICIALIZA ADMOB
+        MobileAds.initialize(this)
+
+        adView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
 
         val btnAdicionar = findViewById<Button>(R.id.btnAdicionar)
         val btnVerResumo = findViewById<Button>(R.id.btnVerResumo)
@@ -30,22 +41,18 @@ class MainActivity : AppCompatActivity() {
         val btnAtivarNotif = findViewById<Button>(R.id.btnAtivarNotif)
         val btnSobre = findViewById<Button>(R.id.btnSobre)
 
-        // ➕ Adicionar lançamento manual
         btnAdicionar.setOnClickListener {
             startActivity(Intent(this, AddTransactionActivity::class.java))
         }
 
-        // 📊 Ver resumo financeiro
         btnVerResumo.setOnClickListener {
             startActivity(Intent(this, ResumoActivity::class.java))
         }
 
-        // 📷 Abrir leitor de QR Code
         btnEscanearQR.setOnClickListener {
             startActivity(Intent(this, QrScannerActivity::class.java))
         }
 
-        // 🔔 Ativar leitura de notificações (COM AVISO EXPLICATIVO)
         btnAtivarNotif.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Permissão de Notificações")
@@ -61,7 +68,6 @@ class MainActivity : AppCompatActivity() {
                 .show()
         }
 
-        // ℹ️ SOBRE E PRIVACIDADE (VERSÃO PROFISSIONAL)
         btnSobre.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Sobre o GS Ledger")

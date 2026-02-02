@@ -80,7 +80,7 @@
 
     </LinearLayout>
 
-    <!-- 💰 BANNER ADMOB FIXO EMBAIXO (ID REAL) -->
+    <!-- 💰 BANNER ADMOB REAL -->
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="match_parent"

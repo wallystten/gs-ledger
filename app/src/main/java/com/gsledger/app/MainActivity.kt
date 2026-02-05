@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 
@@ -28,12 +27,12 @@ class MainActivity : AppCompatActivity() {
         analytics.logEvent("app_aberto", null)
         Log.d("FIREBASE_TESTE", "Firebase conectado com sucesso!")
 
-        // 💰 INICIALIZA ADMOB
-        MobileAds.initialize(this)
-
-        adView = findViewById(R.id.adView)
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
+        // 💰 INICIALIZA ADMOB CORRETAMENTE
+        MobileAds.initialize(this) {
+            adView = findViewById(R.id.adView)
+            val adRequest = AdRequest.Builder().build()
+            adView.loadAd(adRequest)
+        }
 
         val btnAdicionar = findViewById<Button>(R.id.btnAdicionar)
         val btnVerResumo = findViewById<Button>(R.id.btnVerResumo)
@@ -84,4 +83,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
- 

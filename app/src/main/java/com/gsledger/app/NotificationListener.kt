@@ -47,7 +47,6 @@ class NotificationListener : NotificationListenerService() {
             else -> "Banco"
         }
 
-        // ✅ CHAMADA CORRETA (SEM NOMEAR PARÂMETROS)
         Storage.saveTransaction(
             applicationContext,
             "Movimentação bancária",
@@ -72,7 +71,12 @@ class NotificationListener : NotificationListenerService() {
             "pix enviado", "você enviou", "pagamento realizado",
             "pagamento de", "compra no valor", "débito realizado",
             "debito realizado", "transferência enviada", "ted enviada",
-            "você pagou", "pix pago"
+            "você pagou", "pix pago",
+
+            // 🆕 SANTANDER (cartão débito/crédito)
+            "compra aprovada",
+            "compra no cartão",
+            "cartão final"
         )
 
         val palavrasEntrada = listOf(

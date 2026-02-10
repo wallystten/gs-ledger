@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android AAB
 
 on:
   push:
@@ -18,17 +18,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # 🔥 NÃO precisa instalar Gradle global
-      # O wrapper já cuida disso
-
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug   # ✅ USA O WRAPPER CERTO
+      # ✅ GERA O AAB (OBRIGATÓRIO PARA GOOGLE PLAY)
+      - name: Build Release AAB
+        run: ./gradlew bundleRelease
 
-      - name: Upload APK
+      # ✅ FAZ UPLOAD DO .AAB
+      - name: Upload AAB
         uses: actions/upload-artifact@v4
         with:
-          name: GS-Ledger-APK
-          path: app/build/outputs/apk/debug/*.apk
+          name: GS-Ledger-AAB
+          path: app/build/outputs/bundle/release/*.aab
